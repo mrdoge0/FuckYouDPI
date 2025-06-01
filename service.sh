@@ -18,9 +18,7 @@ fi
 # Determine architecture (needed for invoking tpws)
 case "$(getprop ro.product.cpu.abi)" in
   arm64-v8a) ARCH="aarch64" ;;
-  armeabi-v7a) ARCH="armv7eabi" ;;
   x86_64) ARCH="x86_64" ;;
-  x86) ARCH="i686" ;;
   *) echo "[FuckYouDPI] Architecture is NOT supported!"; exit 1 ;;
 esac
 

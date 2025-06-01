@@ -35,6 +35,10 @@ TPWS_BINARY="${MODDIR}/static-${ARCH}/tpws"
 echo "[FuckYouDPI] starting static-${ARCH}/tpws"
 ${TPWS_BINARY} --port ${TPWS_TARGET_PORT} ${TPWS_ARGS} &
 
+# Create kernel rules.
+ip rule add fwmark 1 lookup 100 2>/dev/null
+ip route add local 0.0.0.0/0 dev lo table 100 2>/dev/null
+
 # Run workers.
 for pkg in $(ls "${DOTFILEDIR}" | grep -vE '^TRICK_|^PORT$'); do
   "${MODDIR}/fydpi_worker.sh" "$pkg" &

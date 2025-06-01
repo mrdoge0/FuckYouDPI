@@ -1,0 +1,28 @@
+#!/system/bin/sh
+
+[ ! "$(id -u)" = 0 ] && echo "Try again as root." && exit 1
+
+case "$1" in
+  enable) [ -z "$2" ] && echo "Usage: fydpiutil enable [package] (eg. fydpiutil enable com.android.chrome)" && exit 1
+          [ ! pm list packages | grep "$2" > /dev/null] && echo "Package $2 doesn't exist." && exit 1
+          touch "/data/adb/fuckyoudpi.d/$2" && echo "Success - Changes now require a reboot.";;
+  disable) [ -z "$2" ] && echo "Usage: fydpiutil disable [package] (eg. fydpiutil disable com.android.chrome)" && exit 1
+          [ ! -f "/data/adb/fuckyoudpi.d/$2" ] && echo "Nothing to do." && exit 0
+          rm "/data/adb/fuckyoudpi.d/$2" && echo "Success - Changes now require a reboot.";;
+  trick) case "$2 $3" in
+            "hostspell enable") [ -f "/data/adb/fuckyoudpi.d/TRICK_HOSTSPELL" ] && echo "Nothing to do." && exit 0
+                                touch "/data/adb/fuckyoudpi.d/TRICK_HOSTSPELL" && echo "Success - Changes now require a reboot.";;
+            "hostspell disable") [ ! -f "/data/adb/fuckyoudpi.d/TRICK_HOSTSPELL" ] && echo "Nothing to do." && exit 0
+                                rm "/data/adb/fuckyoudpi.d/TRICK_HOSTSPELL" && echo "Success - Changes now require a reboot.";;
+            "oob enable") [ -f "/data/adb/fuckyoudpi.d/TRICK_OOB" ] && echo "Nothing to do." && exit 0
+                                touch "/data/adb/fuckyoudpi.d/TRICK_OOB" && echo "Success - Changes now require a reboot.";;
+            "oob disable") [ ! -f "/data/adb/fuckyoudpi.d/TRICK_OOB" ] && echo "Nothing to do." && exit 0
+                                rm "/data/adb/fuckyoudpi.d/TRICK_OOB" && echo "Success - Changes now require a reboot.";;
+            "disorder enable") [ -f "/data/adb/fuckyoudpi.d/TRICK_DISORDER" ] && echo "Nothing to do." && exit 0
+                                touch "/data/adb/fuckyoudpi.d/TRICK_DISORDER" && echo "Success - Changes now require a reboot.";;
+            "disorder disable") [ ! -f "/data/adb/fuckyoudpi.d/TRICK_DISORDER" ] && echo "Nothing to do." && exit 0
+                                rm "/data/adb/fuckyoudpi.d/TRICK_DISORDER" && echo "Success - Changes now require a reboot.";;
+            *) echo "Usage: fydpiutil trick [hostspell/oob/disorder] [enable/disable] && exit 1;
+          esac;;
+  *) echo "Usage: fydpiutil [[enable/disable] [package]] [trick [hostspell/oob/disorder] [enable/diasble]] && exit 1;;
+esac

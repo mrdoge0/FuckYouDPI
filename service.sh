@@ -25,7 +25,7 @@ case "$(getprop ro.product.cpu.abi)" in
 esac
 
 # Load in settings.
-TPWS_TARGET_PORT=$(cat "${DOTFILEDIR}/PORT")
+TPWS_TARGET_PORT=$(cat "${DOTFILEDIR}/PORT" 2>/dev/null)
 TPWS_ARGS=""
 [ -f "${DOTFILEDIR}/TRICK_HOSTSPELL" ] && TPWS_ARGS="${TPWS_ARGS} --hostspell=hoSt"
 [ -f "${DOTFILEDIR}/TRICK_OOB" ] && TPWS_ARGS="${TPWS_ARGS} --oob"
@@ -33,10 +33,11 @@ TPWS_ARGS=""
 
 # Check for binary and start TPWS.
 TPWS_BINARY="${MODDIR}/static-${ARCH}/tpws"
-[ ! -f "${TPWS_BINARY}" ] && echo "[FuckYouDPI] Unable to find TPWS binary for '${ARCH}'!"; exit 1
+[ ! -f "${TPWS_BINARY}" ] && echo "[FuckYouDPI] Unable to find TPWS binary for '${ARCH}'!"
+echo "[FuckYouDPI] starting static-${ARCH}/tpws"
 ${TPWS_BINARY} --port ${TPWS_TARGET_PORT} ${TPWS_ARGS} &
 
 # Run workers.
 for pkg in $(ls "${DOTFILEDIR}" | grep -vE '^TRICK_|^PORT$'); do
-  ./fydpi_worker.sh "$pkg" &
+  "${MODDIR}/fydpi_worker.sh" "$pkg" &
 done

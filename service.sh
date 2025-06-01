@@ -11,11 +11,11 @@ if [ ! -d "${DOTFILEDIR}" ]; then
   touch "${DOTFILEDIR}/TRICK_HOSTSPELL"
   touch "${DOTFILEDIR}/TRICK_OOB"
   touch "${DOTFILEDIR}/TRICK_DISORDER"
-  echo "127.0.0.1:1080" > "${DOTFILEDIR}/SOCKS5"
+  echo "1080" > "${DOTFILEDIR}/PORT"
   echo "[FuckYouDPI] First time starting."
 fi
 
-# Determine architecture (needed for invoking nfqws)
+# Determine architecture (needed for invoking tpws)
 case "$(getprop ro.product.cpu.abi)" in
   arm64-v8a) ARCH="aarch64" ;;
   armeabi-v7a) ARCH="armv7eabi" ;;
@@ -25,8 +25,18 @@ case "$(getprop ro.product.cpu.abi)" in
 esac
 
 # Load in settings.
-NFQWS_SOCKS5_TARGET=$(cat "${DOTFILEDIR}/SOCKS5")
-NFQWS_ARGS=""
-[ -f "${DOTFILEDIR}/TRICK_HOSTSPELL" ] && NFQWS_ARGS="${NFQWS_ARGS} --hostspell=hoSt"
-[ -f "${DOTFILEDIR}/TRICK_OOB" ] && NFQWS_ARGS="${NFQWS_ARGS} --oob"
-[ -f "${DOTFILEDIR}/TRICK_DISORDER" ] && NFQWS_ARGS="${NFQWS_ARGS} --disorder"
+TPWS_TARGET_PORT=$(cat "${DOTFILEDIR}/PORT")
+TPWS_ARGS=""
+[ -f "${DOTFILEDIR}/TRICK_HOSTSPELL" ] && TPWS_ARGS="${TPWS_ARGS} --hostspell=hoSt"
+[ -f "${DOTFILEDIR}/TRICK_OOB" ] && TPWS_ARGS="${TPWS_ARGS} --oob"
+[ -f "${DOTFILEDIR}/TRICK_DISORDER" ] && TPWS_ARGS="${TPWS_ARGS} --disorder"
+
+# Check for binary and start TPWS.
+TPWS_BINARY="${MODDIR}/static-${ARCH}/tpws"
+[ ! -f "${TPWS_BINARY}" ] && echo "[FuckYouDPI] Unable to find TPWS binary for '${ARCH}'!"; exit 1
+${TPWS_BINARY} --port ${TPWS_TARGET_PORT} ${TPWS_ARGS} &
+
+# Run workers.
+for pkg in $(ls "${DOTFILEDIR}" | grep -vE '^TRICK_|^PORT$'); do
+  ./fydpi_worker.sh "$pkg" &
+done

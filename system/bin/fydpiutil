@@ -22,7 +22,7 @@ case "$1" in
                                 touch "/data/adb/fuckyoudpi.d/TRICK_DISORDER" && echo "Success - Changes now require a reboot.";;
             "disorder disable") [ ! -f "/data/adb/fuckyoudpi.d/TRICK_DISORDER" ] && echo "Nothing to do." && exit 0
                                 rm "/data/adb/fuckyoudpi.d/TRICK_DISORDER" && echo "Success - Changes now require a reboot.";;
-            *) echo "Usage: fydpiutil trick [hostspell/oob/disorder] [enable/disable]" && exit 1;
+            *) echo "Usage: fydpiutil trick [hostspell/oob/disorder] [enable/disable]" && exit 1;;
           esac;;
   *) echo "Usage: fydpiutil [[enable/disable] [package]] [trick [hostspell/oob/disorder] [enable/disable]] && exit 1;;
 esac

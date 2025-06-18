@@ -24,5 +24,5 @@ case "$1" in
                                 rm "/data/adb/fuckyoudpi.d/TRICK_DISORDER" && echo "Success - Changes now require a reboot.";;
             *) echo "Usage: fydpiutil trick [hostspell/oob/disorder] [enable/disable]" && exit 1;;
           esac;;
-  *) echo "Usage: fydpiutil [[enable/disable] [package]] [trick [hostspell/oob/disorder] [enable/disable]] && exit 1;;
+  *) echo "Usage: fydpiutil [[enable/disable] [package]] [trick [hostspell/oob/disorder] [enable/disable]]" && exit 1;;
 esac

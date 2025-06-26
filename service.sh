@@ -39,7 +39,5 @@ ${TPWS_BINARY} --port ${TPWS_TARGET_PORT} ${TPWS_ARGS} &
 ip rule add fwmark 1 lookup 100 2>/dev/null
 ip route add local 0.0.0.0/0 dev lo table 100 2>/dev/null
 
-# Run workers.
-for pkg in $(ls "${DOTFILEDIR}" | grep -vE '^TRICK_|^PORT$'); do
-  "${MODDIR}/fydpi_worker.sh" "$pkg" &
-done
+# Done.
+exit 0

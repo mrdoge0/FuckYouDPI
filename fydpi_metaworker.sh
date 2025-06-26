@@ -6,5 +6,5 @@ DOTFILEDIR="/data/adb/fuckyoudpi.d"
 
 # Run workers.
 for pkg in $(ls "${DOTFILEDIR}" | grep -vE '^TRICK_|^PORT$'); do
-  "${MODDIR}/fydpi_worker.sh" "$pkg" &
+  "${MODDIR}/fydpi_worker.sh" "$pkg"
 done

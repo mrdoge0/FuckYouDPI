@@ -24,7 +24,7 @@ esac
 
 # Load in settings.
 TPWS_TARGET_PORT=$(cat "${DOTFILEDIR}/PORT" 2>/dev/null)
-TPWS_ARGS=""
+TPWS_ARGS="--port ${TPWS_TARGET_PORT}"
 [ -f "${DOTFILEDIR}/TRICK_HOSTSPELL" ] && TPWS_ARGS="${TPWS_ARGS} --hostspell=hoSt"
 [ -f "${DOTFILEDIR}/TRICK_OOB" ] && TPWS_ARGS="${TPWS_ARGS} --oob"
 [ -f "${DOTFILEDIR}/TRICK_DISORDER" ] && TPWS_ARGS="${TPWS_ARGS} --disorder"
@@ -33,7 +33,7 @@ TPWS_ARGS=""
 TPWS_BINARY="${MODDIR}/static-${ARCH}/tpws"
 [ ! -f "${TPWS_BINARY}" ] && echo "[FuckYouDPI] Unable to find TPWS binary for '${ARCH}'!"
 echo "[FuckYouDPI] starting static-${ARCH}/tpws"
-${TPWS_BINARY} --port ${TPWS_TARGET_PORT} ${TPWS_ARGS} &
+${TPWS_BINARY} ${TPWS_ARGS} &
 
 # Create kernel rules.
 ip rule add fwmark 1 lookup 100 2>/dev/null

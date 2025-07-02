@@ -4,7 +4,7 @@
 
 case "$1" in
   enable) [ -z "$2" ] && echo "Usage: fydpiutil enable [package] (eg. fydpiutil enable com.android.chrome)" && exit 1
-          [ ! pm list packages | grep "$2" > /dev/null] && echo "Package $2 doesn't exist." && exit 1
+          pm list packages "$2" >/dev/null 2>&1 || { echo "Package $2 doesn't exist."; exit 1; }
           touch "/data/adb/fuckyoudpi.d/$2" && echo "Success - Changes now require a reboot.";;
   disable) [ -z "$2" ] && echo "Usage: fydpiutil disable [package] (eg. fydpiutil disable com.android.chrome)" && exit 1
           [ ! -f "/data/adb/fuckyoudpi.d/$2" ] && echo "Nothing to do." && exit 0
@@ -59,11 +59,11 @@ case "$1" in
   domain) [ -z "$2" ] && echo "Usage: fydpiutil domain [target_domain] [enable/disable] (eg. fydpiutil domain discord.com enable)" && exit 1
           [ -z "$3" ] && echo "Usage: fydpiutil domain [target_domain] [enable/disable] (eg. fydpiutil domain discord.com enable)" && exit 1
           case "$3" in
-            enable) [ grep -Fxq "$2" /data/adb/fuckyoudpi.d/TRICK_TARGETS ] && echo "Nothing to do." && exit 0
+            enable) grep -Fxq "$2" /data/adb/fuckyoudpi.d/TRICK_TARGETS && echo "Nothing to do." && exit 0
                     echo "$2" >> /data/adb/fuckyoudpi.d/TRICK_TARGETS
                     echo "Success - Changes now require a reboot.";;
-            disable) [ ! grep -Fxq "$2" /data/adb/fuckyoudpi.d/TRICK_TARGETS ] && echo "Nothing to do." && exit 0
-                    sed -i '/$2/d' /data/adb/fuckyoudpi.d/TRICK_TARGETS
+            disable) ! grep -Fxq "$2" /data/adb/fuckyoudpi.d/TRICK_TARGETS && echo "Nothing to do." && exit 0
+                    sed -i "/$2/d" /data/adb/fuckyoudpi.d/TRICK_TARGETS
                     echo "Success - Changes now require a reboot.";;
             *) echo "Usage: fydpiutil [[enable/disable] [package]] [trick [trick] [enable/disable]]" && exit 1;;
           esac;;

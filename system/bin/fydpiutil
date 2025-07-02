@@ -24,5 +24,16 @@ case "$1" in
                                 rm "/data/adb/fuckyoudpi.d/TRICK_DISORDER" && echo "Success - Changes now require a reboot.";;
             *) echo "Usage: fydpiutil trick [hostspell/oob/disorder] [enable/disable]" && exit 1;;
           esac;;
+  domain) [ -z "$2" ] && echo "Usage: fydpiutil domain [target_domain] [enable/disable] (eg. fydpiutil domain discord.com enable)" && exit 1
+          [ -z "$3" ] && echo "Usage: fydpiutil domain [target_domain] [enable/disable] (eg. fydpiutil domain discord.com enable)" && exit 1
+          case "$3" in
+            enable) [ grep -Fxq "$2" /data/adb/fuckyoudpi.d/TRICK_TARGETS ] && echo "Nothing to do." && exit 0
+                    echo "$2" >> /data/adb/fuckyoudpi.d/TRICK_TARGETS
+                    echo "Success - Changes now require a reboot.";;
+            disable) [ ! grep -Fxq "$2" /data/adb/fuckyoudpi.d/TRICK_TARGETS ] && echo "Nothing to do." && exit 0
+                    sed -i '/$2/d' /data/adb/fuckyoudpi.d/TRICK_TARGETS
+                    echo "Success - Changes now require a reboot.";;
+            *) echo "Usage: fydpiutil [[enable/disable] [package]] [trick [hostspell/oob/disorder] [enable/disable]]" && exit 1;;
+          esac;;
   *) echo "Usage: fydpiutil [[enable/disable] [package]] [trick [hostspell/oob/disorder] [enable/disable]]" && exit 1;;
 esac

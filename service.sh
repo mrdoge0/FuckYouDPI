@@ -12,7 +12,7 @@ if [ ! -d "${DOTFILEDIR}" ]; then
   touch "${DOTFILEDIR}/TRICK_OOB"
   touch "${DOTFILEDIR}/TRICK_DISORDER"
   touch "${DOTFILEDIR}/TRICK_TARGETS"
-  echo "1080" > "${DOTFILEDIR}/PORT"
+  echo "3128" > "${DOTFILEDIR}/PORT"
   echo "[FuckYouDPI] First time starting."
 fi
 

@@ -22,7 +22,39 @@ case "$1" in
                                 touch "/data/adb/fuckyoudpi.d/TRICK_DISORDER" && echo "Success - Changes now require a reboot.";;
             "disorder disable") [ ! -f "/data/adb/fuckyoudpi.d/TRICK_DISORDER" ] && echo "Nothing to do." && exit 0
                                 rm "/data/adb/fuckyoudpi.d/TRICK_DISORDER" && echo "Success - Changes now require a reboot.";;
-            *) echo "Usage: fydpiutil trick [hostspell/oob/disorder] [enable/disable]" && exit 1;;
+            "hostdot enable") [ -f "/data/adb/fuckyoudpi.d/TRICK_HOSTDOT" ] && echo "Nothing to do." && exit 0
+                                touch "/data/adb/fuckyoudpi.d/TRICK_HOSTDOT" && echo "Success - Changes now require a reboot.";;
+            "hostdot disable") [ ! -f "/data/adb/fuckyoudpi.d/TRICK_HOSTDOT" ] && echo "Nothing to do." && exit 0
+                                rm "/data/adb/fuckyoudpi.d/TRICK_HOSTDOT" && echo "Success - Changes now require a reboot.";;
+            "hosttab enable") [ -f "/data/adb/fuckyoudpi.d/TRICK_HOSTTAB" ] && echo "Nothing to do." && exit 0
+                                touch "/data/adb/fuckyoudpi.d/TRICK_HOSTTAB" && echo "Success - Changes now require a reboot.";;
+            "hosttab disable") [ ! -f "/data/adb/fuckyoudpi.d/TRICK_HOSTTAB" ] && echo "Nothing to do." && exit 0
+                                rm "/data/adb/fuckyoudpi.d/TRICK_HOSTTAB" && echo "Success - Changes now require a reboot.";;
+            "hostnospace enable") [ -f "/data/adb/fuckyoudpi.d/TRICK_HOSTNOSPACE" ] && echo "Nothing to do." && exit 0
+                                touch "/data/adb/fuckyoudpi.d/TRICK_HOSTNOSPACE" && echo "Success - Changes now require a reboot.";;
+            "hostnospace disable") [ ! -f "/data/adb/fuckyoudpi.d/TRICK_HOSTNOSPACE" ] && echo "Nothing to do." && exit 0
+                                rm "/data/adb/fuckyoudpi.d/TRICK_HOSTNOSPACE" && echo "Success - Changes now require a reboot.";;
+            "domcase enable") [ -f "/data/adb/fuckyoudpi.d/TRICK_DOMCASE" ] && echo "Nothing to do." && exit 0
+                                touch "/data/adb/fuckyoudpi.d/TRICK_DOMCASE" && echo "Success - Changes now require a reboot.";;
+            "domcase disable") [ ! -f "/data/adb/fuckyoudpi.d/TRICK_DOMCASE" ] && echo "Nothing to do." && exit 0
+                                rm "/data/adb/fuckyoudpi.d/TRICK_DOMCASE" && echo "Success - Changes now require a reboot.";;
+            "methodspace enable") [ -f "/data/adb/fuckyoudpi.d/TRICK_METHODSPACE" ] && echo "Nothing to do." && exit 0
+                                touch "/data/adb/fuckyoudpi.d/TRICK_METHODSPACE" && echo "Success - Changes now require a reboot.";;
+            "methodspace disable") [ ! -f "/data/adb/fuckyoudpi.d/TRICK_METHODSPACE" ] && echo "Nothing to do." && exit 0
+                                rm "/data/adb/fuckyoudpi.d/TRICK_METHODSPACE" && echo "Success - Changes now require a reboot.";;
+            "methodeol enable") [ -f "/data/adb/fuckyoudpi.d/TRICK_METHODEOL" ] && echo "Nothing to do." && exit 0
+                                touch "/data/adb/fuckyoudpi.d/TRICK_METHODEOL" && echo "Success - Changes now require a reboot.";;
+            "methodeol disable") [ ! -f "/data/adb/fuckyoudpi.d/TRICK_METHODEOL" ] && echo "Nothing to do." && exit 0
+                                rm "/data/adb/fuckyoudpi.d/TRICK_METHODEOL" && echo "Success - Changes now require a reboot.";;
+            "unixeol enable") [ -f "/data/adb/fuckyoudpi.d/TRICK_UNIXEOL" ] && echo "Nothing to do." && exit 0
+                                touch "/data/adb/fuckyoudpi.d/TRICK_UNIXEOL" && echo "Success - Changes now require a reboot.";;
+            "unixeol disable") [ ! -f "/data/adb/fuckyoudpi.d/TRICK_UNIXEOL" ] && echo "Nothing to do." && exit 0
+                                rm "/data/adb/fuckyoudpi.d/TRICK_UNIXEOL" && echo "Success - Changes now require a reboot.";;
+            "split enable") [ -f "/data/adb/fuckyoudpi.d/TRICK_SPLIT" ] && echo "Nothing to do." && exit 0
+                                touch "/data/adb/fuckyoudpi.d/TRICK_SPLIT" && echo "Success - Changes now require a reboot.";;
+            "split disable") [ ! -f "/data/adb/fuckyoudpi.d/TRICK_SPLIT" ] && echo "Nothing to do." && exit 0
+                                rm "/data/adb/fuckyoudpi.d/TRICK_SPLIT" && echo "Success - Changes now require a reboot.";;
+            *) echo "Usage: fydpiutil trick [hostspell/oob/disorder/hostdot/hosttab/hostnospace/domcase/methodspace/methodeol/unixeol/split] [enable/disable]" && exit 1;;
           esac;;
   domain) [ -z "$2" ] && echo "Usage: fydpiutil domain [target_domain] [enable/disable] (eg. fydpiutil domain discord.com enable)" && exit 1
           [ -z "$3" ] && echo "Usage: fydpiutil domain [target_domain] [enable/disable] (eg. fydpiutil domain discord.com enable)" && exit 1
@@ -33,7 +65,7 @@ case "$1" in
             disable) [ ! grep -Fxq "$2" /data/adb/fuckyoudpi.d/TRICK_TARGETS ] && echo "Nothing to do." && exit 0
                     sed -i '/$2/d' /data/adb/fuckyoudpi.d/TRICK_TARGETS
                     echo "Success - Changes now require a reboot.";;
-            *) echo "Usage: fydpiutil [[enable/disable] [package]] [trick [hostspell/oob/disorder] [enable/disable]]" && exit 1;;
+            *) echo "Usage: fydpiutil [[enable/disable] [package]] [trick [trick] [enable/disable]]" && exit 1;;
           esac;;
-  *) echo "Usage: fydpiutil [[enable/disable] [package]] [trick [hostspell/oob/disorder] [enable/disable]]" && exit 1;;
+  *) echo "Usage: fydpiutil [[enable/disable] [package]] [trick [trick] [enable/disable]]" && exit 1;;
 esac

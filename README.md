@@ -25,6 +25,13 @@ FuckYouDPI can be installed and uninstalled just like any other Magisk/KernelSU/
 * Cons:
   * **Requires root**, so not installable on devices that have fully locked bootloaders.
 
+### Using `fydpiutil`, the command line utility of FuckYouDPI
+`fydpiutil` is the integrated command line utility of this module. You can use it on a rooted session of a terminal app (like Termux). With `fydpiutil`;
+* Apply or deapply to an app.
+* Enable or disable to a domain.
+* Enable or disable a trick.
+* For usage, refer to the [FuckYouDPI wiki](https://github.com/mrdoge0/FuckYouDPI/wiki/Usage-of-fydpiutil).
+
 ### How to build?
 * Clone the repository.
   ```git clone https://github.com/mrdoge0/FuckYouDPI --depth=1 -b main && cd FuckYouDPI```

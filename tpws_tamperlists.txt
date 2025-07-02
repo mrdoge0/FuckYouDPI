@@ -1,0 +1,21 @@
+TAMPER:
+ --split-pos=N|-N|marker+N|marker-N	; comma separated list of split positions
+					; markers: method,host,endhost,sld,endsld,midsld,sniext
+ --split-any-protocol			; split not only http and TLS
+ --disorder[=http|tls]			; when splitting simulate sending second fragment first
+ --oob[=http|tls]			; when splitting send out of band byte. default is HEX 0x00.
+ --oob-data=<char>|0xHEX		; override default 0x00 OOB byte.
+ --hostcase				; change Host: => host:
+ --hostspell				; exact spelling of "Host" header. must be 4 chars. default is "host"
+ --hostdot				; add "." after Host: name
+ --hosttab				; add tab after Host: name
+ --hostnospace				; remove space after Host:
+ --hostpad=<bytes>			; add dummy padding headers before Host:
+ --domcase				; mix domain case : Host: TeSt.cOm
+ --methodspace				; add extra space after method
+ --methodeol				; add end-of-line before method
+ --unixeol				; replace 0D0A to 0A
+ --tlsrec=N|-N|marker+N|marker-N	; make 2 TLS records. split records at specified position.
+ --mss=<int>				; set client MSS. forces server to split messages but significantly decreases speed !
+ --tamper-start=[n]<pos>		; start tampering only from specified outbound stream position. default is 0. 'n' means data block number.
+ --tamper-cutoff=[n]<pos>		; do not tamper anymore after specified outbound stream position. default is unlimited.

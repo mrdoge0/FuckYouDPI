@@ -23,8 +23,7 @@ case "$(getprop ro.product.cpu.abi)" in
 esac
 
 # Load in settings.
-TPWS_TARGET_PORT=$(cat "${DOTFILEDIR}/PORT" 2>/dev/null)
-TPWS_ARGS="--port ${TPWS_TARGET_PORT}"
+TPWS_ARGS="--port $(cat "${DOTFILEDIR}/PORT" 2>/dev/null)"
 [ -f "${DOTFILEDIR}/TRICK_HOSTSPELL" ] && TPWS_ARGS="${TPWS_ARGS} --hostspell=hoSt"
 [ -f "${DOTFILEDIR}/TRICK_OOB" ] && TPWS_ARGS="${TPWS_ARGS} --oob"
 [ -f "${DOTFILEDIR}/TRICK_DISORDER" ] && TPWS_ARGS="${TPWS_ARGS} --disorder"

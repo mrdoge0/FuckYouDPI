@@ -13,9 +13,6 @@ set_permissions() {
   set_perm           $MODPATH/fydpi_metaworker.sh 0 0 0755
   set_perm           $MODPATH/fydpi_worker.sh     0 0 0755
   set_perm           $MODPATH/service.sh          0 0 0755
-  ui_print "- Installing companion"
-  unzip -qjo "$ZIPFILE" 'companion.apk' -d $TMPDIR >&2
-  pm install --user 0 $TMPDIR/companion.apk
 }
 
 # Logic from MMT Extended

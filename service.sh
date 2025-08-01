@@ -4,6 +4,29 @@
 MODDIR=${0%/*}
 DOTFILEDIR="/data/adb/fuckyoudpi.d"
 
+# Enable or disable logging by looking to TRICK_NO_LOG
+# (maybe some carriers would detect the module via logs, so I wanna make it togglable)
+if [ -f "${DOTFILEDIR}/TRICK_NO_LOG" ]; then
+  LOGGING_ENABLED=0
+else
+  LOGGING_ENABLED=1
+fi
+
+# Info logging function
+log_inf() {
+  [ "${LOGGING_ENABLED}" -eq 1 ] && log -p i -t "FuckYouDPI" "$1"
+}
+
+# Warning logging function
+log_wrn() {
+  [ "${LOGGING_ENABLED}" -eq 1 ] && log -p w -t "FuckYouDPI" "$1"
+}
+
+# Error logging function
+log_err() {
+  [ "${LOGGING_ENABLED}" -eq 1 ] && log -p e -t "FuckYouDPI" "$1"
+}
+
 # Create fuckyoudpi.d if doesn't exist.
 if [ ! -d "${DOTFILEDIR}" ]; then
   mkdir "${DOTFILEDIR}"
@@ -13,14 +36,14 @@ if [ ! -d "${DOTFILEDIR}" ]; then
   touch "${DOTFILEDIR}/TRICK_DISORDER"
   touch "${DOTFILEDIR}/TRICK_TARGETS"
   echo "3128" > "${DOTFILEDIR}/PORT"
-  echo "[FuckYouDPI] First time starting."
+  log_inf "First time starting."
 fi
 
 # Determine architecture (needed for invoking tpws)
 case "$(getprop ro.product.cpu.abi)" in
   arm64-v8a) ARCH="aarch64" ;;
-  x86_64) ARCH="x86_64" ;;
-  *) echo "[FuckYouDPI] Architecture is NOT supported!"; exit 1 ;;
+  x86_64) log_wrn "x86_64 support is EXPERIMENTAL"; ARCH="x86_64" ;;
+  *) log_err "Architecture is NOT supported!"; exit 1 ;;
 esac
 
 # Load in settings.
@@ -36,18 +59,21 @@ TPWS_ARGS="--uid=0:0 --port $(cat ${DOTFILEDIR}/PORT 2>/dev/null) --hostlist=${D
 [ -f "${DOTFILEDIR}/TRICK_METHODEOL" ] && TPWS_ARGS="${TPWS_ARGS} --methodeol"
 [ -f "${DOTFILEDIR}/TRICK_UNIXEOL" ] && TPWS_ARGS="${TPWS_ARGS} --unixeol"
 [ -f "${DOTFILEDIR}/TRICK_SPLIT" ] && TPWS_ARGS="${TPWS_ARGS} --split-any-protocol"
+log_inf "TPWS arguments are '${TPWS_ARGS}'"
 
 # Check for binary and start TPWS.
 TPWS_BINARY="${MODDIR}/static-${ARCH}/tpws"
-[ ! -f "${TPWS_BINARY}" ] && echo "[FuckYouDPI] Unable to find TPWS binary for '${ARCH}'!"
-echo "[FuckYouDPI] starting static-${ARCH}/tpws"
+[ ! -f "${TPWS_BINARY}" ] && log_err "[FuckYouDPI] Unable to find TPWS binary for '${ARCH}'!"
+log_inf "Starting static-${ARCH}/tpws"
 ${TPWS_BINARY} ${TPWS_ARGS} &
 
 # Create kernel rules.
+log_inf "Adding kernel rules"
 ip rule add fwmark 1 lookup 100 2>/dev/null
 ip route add local 0.0.0.0/0 dev lo table 100 2>/dev/null
 
 # Wait 15 seconds for userland to finish getting ready.
+log_inf "Waiting userland to get ready"
 sleep 15
 
 # Run workers.
@@ -55,13 +81,13 @@ for pkg in $(ls "${DOTFILEDIR}" | grep -vE '^TRICK_|^PORT$'); do
     for TARGET_UID in $(dumpsys package $pkg | grep uid | cut -d= -f2 | cut -d" " -f1 | uniq); do
     
     # Report start.
-    echo "[FuckYouDPI] Enabling for $pkg (UID ${TARGET_UID})"
+    log_inf "Enabling for $pkg (UID ${TARGET_UID})"
     
     # Route app to this entire fuckery.
     iptables -t mangle -A OUTPUT -p tcp -m owner --uid-owner "$TARGET_UID" -j MARK --set-mark 1
     iptables -t mangle -A PREROUTING -p tcp -m mark --mark 1 -j TPROXY --on-port "$PORT" --tproxy-mark 1
     
     # Report finish.
-    echo "[FuckYouDPI] Done enabling for $pkg (UID ${TARGET_UID})"
+    log_inf "Done enabling for $pkg (UID ${TARGET_UID})"
   done
 done

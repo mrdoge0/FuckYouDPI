@@ -1,3 +1,4 @@
+# Development file, gets stripped in official builds.
 TAMPER:
  --split-pos=N|-N|marker+N|marker-N	; comma separated list of split positions
 					; markers: method,host,endhost,sld,endsld,midsld,sniext

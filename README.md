@@ -35,7 +35,6 @@ FuckYouDPI can be installed and uninstalled just like any other Magisk/KernelSU/
 ### How to build?
 * Clone the repository.
   ```git clone https://github.com/mrdoge0/FuckYouDPI --depth=1 -b main && cd FuckYouDPI```
-* `companion.apk` in the repository is directly from the latest release in the companion's repository ([https://github.com/mrdoge0/FuckYouDPI-companion](https://github.com/mrdoge0/FuckYouDPI-companion)), but if you're too paranoid, you can build it yourself.
 * TPWS binaries in the repository are directly built from the [bol-van](https://github.com/bol-van)'s official [Zapret](https://github.com/bol-van/zapret) source, but if you're too paranoid, you can build them yourself. Just be sure that you're building **static** binaries.
 * Pack everything.
   ```zip -r out.zip *```

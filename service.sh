@@ -47,5 +47,21 @@ ${TPWS_BINARY} ${TPWS_ARGS} &
 ip rule add fwmark 1 lookup 100 2>/dev/null
 ip route add local 0.0.0.0/0 dev lo table 100 2>/dev/null
 
-# Done.
-exit 0
+# Wait 15 seconds for userland to finish getting ready.
+sleep 15
+
+# Run workers.
+for pkg in $(ls "${DOTFILEDIR}" | grep -vE '^TRICK_|^PORT$'); do
+    for TARGET_UID in $(dumpsys package $pkg | grep uid | cut -d= -f2 | cut -d" " -f1 | uniq); do
+    
+    # Report start.
+    echo "[FuckYouDPI] Enabling for $pkg (UID ${TARGET_UID})"
+    
+    # Route app to this entire fuckery.
+    iptables -t mangle -A OUTPUT -p tcp -m owner --uid-owner "$TARGET_UID" -j MARK --set-mark 1
+    iptables -t mangle -A PREROUTING -p tcp -m mark --mark 1 -j TPROXY --on-port "$PORT" --tproxy-mark 1
+    
+    # Report finish.
+    echo "[FuckYouDPI] Done enabling for $pkg (UID ${TARGET_UID})"
+  done
+done

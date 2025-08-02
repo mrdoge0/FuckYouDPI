@@ -47,36 +47,57 @@ if [ ! -f "${DOTFILEDIR}/PORT" ] || [ -z "$(cat ${DOTFILEDIR}/PORT)" ]; then
   echo "3128" > "${DOTFILEDIR}/PORT"
 fi
 
-# Determine architecture (needed for invoking tpws)
+# Same thing as up, but for nfqws
+if [ ! -f "${DOTFILEDIR}/TRICK_NFQWS_PORT" ] || [ -z "$(cat ${DOTFILEDIR}/TRICK_NFQWS_PORT)" ]; then
+  log_wrn "PORT setting for NFQWS is missing, setting to 3129"
+  echo "3129" > "${DOTFILEDIR}/TRICK_NFQWS_PORT"
+fi
+
+# Determine architecture (needed for invoking tpws and nfqws)
 case "$(getprop ro.product.cpu.abi)" in
   arm64-v8a) ARCH="aarch64" ;;
   x86_64) log_wrn "x86_64 support is EXPERIMENTAL"; ARCH="x86_64" ;;
   *) log_err "Architecture is NOT supported!" --fatal ;;
 esac
 
-# Determine port
+# Determine ports
 TPWS_PORT="$(cat ${DOTFILEDIR}/PORT 2>/dev/null)"
+NFQWS_PORT="$(cat ${DOTFILEDIR}/TRICK_NFQWS_PORT 2>/dev/null)"
 
 # Load in settings
 TPWS_ARGS="--uid=0:0 --port ${TPWS_PORT} --hostlist=${DOTFILEDIR}/TRICK_TARGETS"
-[ -f "${DOTFILEDIR}/TRICK_HOSTSPELL" ] && TPWS_ARGS="${TPWS_ARGS} --hostspell=hoSt"
-[ -f "${DOTFILEDIR}/TRICK_OOB" ] && TPWS_ARGS="${TPWS_ARGS} --oob"
-[ -f "${DOTFILEDIR}/TRICK_DISORDER" ] && TPWS_ARGS="${TPWS_ARGS} --disorder"
-[ -f "${DOTFILEDIR}/TRICK_HOSTDOT" ] && TPWS_ARGS="${TPWS_ARGS} --hostdot"
-[ -f "${DOTFILEDIR}/TRICK_HOSTTAB" ] && TPWS_ARGS="${TPWS_ARGS} --hosttab"
-[ -f "${DOTFILEDIR}/TRICK_HOSTNOSPACE" ] && TPWS_ARGS="${TPWS_ARGS} --hostnospace"
-[ -f "${DOTFILEDIR}/TRICK_DOMCASE" ] && TPWS_ARGS="${TPWS_ARGS} --domcase"
-[ -f "${DOTFILEDIR}/TRICK_METHODSPACE" ] && TPWS_ARGS="${TPWS_ARGS} --methodspace"
-[ -f "${DOTFILEDIR}/TRICK_METHODEOL" ] && TPWS_ARGS="${TPWS_ARGS} --methodeol"
-[ -f "${DOTFILEDIR}/TRICK_UNIXEOL" ] && TPWS_ARGS="${TPWS_ARGS} --unixeol"
-[ -f "${DOTFILEDIR}/TRICK_SPLIT" ] && TPWS_ARGS="${TPWS_ARGS} --split-any-protocol"
+NFQWS_ARGS="--uid=0:0 --port ${NFQWS_PORT} --hostlist=${DOTFILEDIR}/TRICK_TARGETS"
+[ -f "${DOTFILEDIR}/TRICK_HOSTSPELL" ] && TPWS_ARGS="${TPWS_ARGS} --hostspell=hoSt" && NFQWS_ARGS="${NFQWS_ARGS} --hostspell=hoSt"
+[ -f "${DOTFILEDIR}/TRICK_OOB" ] && TPWS_ARGS="${TPWS_ARGS} --oob" && NFQWS_ARGS="${NFQWS_ARGS} --oob"
+[ -f "${DOTFILEDIR}/TRICK_DISORDER" ] && TPWS_ARGS="${TPWS_ARGS} --disorder" && NFQWS_ARGS="${NFQWS_ARGS} --disorder"
+[ -f "${DOTFILEDIR}/TRICK_HOSTDOT" ] && TPWS_ARGS="${TPWS_ARGS} --hostdot" && NFQWS_ARGS="${NFQWS_ARGS} --hostdot"
+[ -f "${DOTFILEDIR}/TRICK_HOSTTAB" ] && TPWS_ARGS="${TPWS_ARGS} --hosttab" && NFQWS_ARGS="${NFQWS_ARGS} --hosttab"
+[ -f "${DOTFILEDIR}/TRICK_HOSTNOSPACE" ] && TPWS_ARGS="${TPWS_ARGS} --hostnospace" && NFQWS_ARGS="${NFQWS_ARGS} --hostnospace"
+[ -f "${DOTFILEDIR}/TRICK_DOMCASE" ] && TPWS_ARGS="${TPWS_ARGS} --domcase" && NFQWS_ARGS="${NFQWS_ARGS} --domcase"
+[ -f "${DOTFILEDIR}/TRICK_METHODSPACE" ] && TPWS_ARGS="${TPWS_ARGS} --methodspace" && NFQWS_ARGS="${NFQWS_ARGS} --methodspace"
+[ -f "${DOTFILEDIR}/TRICK_METHODEOL" ] && TPWS_ARGS="${TPWS_ARGS} --methodeol" && NFQWS_ARGS="${NFQWS_ARGS} --methodeol"
+[ -f "${DOTFILEDIR}/TRICK_UNIXEOL" ] && TPWS_ARGS="${TPWS_ARGS} --unixeol" && NFQWS_ARGS="${NFQWS_ARGS} --unixeol"
+[ -f "${DOTFILEDIR}/TRICK_SPLIT" ] && TPWS_ARGS="${TPWS_ARGS} --split-any-protocol" && NFQWS_ARGS="${NFQWS_ARGS} --split-any-protocol"
 log_inf "TPWS arguments are '${TPWS_ARGS}'"
+log_inf "NFQWS arguments are '${NFQWS_ARGS}'"
 
 # Check for binary and start TPWS
 TPWS_BINARY="${MODDIR}/static-${ARCH}/tpws"
-[ ! -f "${TPWS_BINARY}" ] && log_err "[FuckYouDPI] Unable to find TPWS binary for '${ARCH}'!" --fatal
+[ ! -f "${TPWS_BINARY}" ] && log_err "Unable to find TPWS binary for '${ARCH}'!" --fatal
 log_inf "Starting static-${ARCH}/tpws"
 ${TPWS_BINARY} ${TPWS_ARGS} &
+
+# Check for binary and start NFQWS, if it's enabled
+NFQWS_BINARY="${MODDIR}/static-${ARCH}/nfqws"
+if [ -f "${DOTFILEDIR}/TRICK_NFQWS" ] && [ -f "${NFQWS_BINARY}" ]; then
+  log_inf "Starting static-${ARCH}/nfqws"
+  ${NFQWS_BINARY} ${NFQWS_ARGS} &
+elif [ -f "${DOTFILEDIR}/TRICK_NFQWS" ] && [ ! -f "${NFQWS_BINARY}" ]; then
+  log_err "Unable to find NFQWS binary for '${ARCH}'!"
+  log_wrn "NFQWS didn't start despite it being enabled"
+else
+  log_inf "NFQWS didn't start because it isn't enabled"
+fi
 
 # Create kernel rules
 log_inf "Adding kernel rules"

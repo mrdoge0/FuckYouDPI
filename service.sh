@@ -91,8 +91,8 @@ sleep 15
 
 # Run workers
 for PKG in $(ls "${DOTFILEDIR}" | grep -vE '^TRICK_|^PORT$'); do
-    for TARGET_UID in $(dumpsys package $pkg | grep uid | cut -d= -f2 | cut -d" " -f1 | uniq); do
-    
+  for TARGET_UID in $(dumpsys package ${PKG} | grep uid | cut -d= -f2 | cut -d" " -f1 | uniq); do
+      
     # Report start.
     log_inf "Enabling for ${PKG} (UID ${TARGET_UID})"
     

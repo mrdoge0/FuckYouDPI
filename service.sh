@@ -44,7 +44,7 @@ if [ ! -d "${DOTFILEDIR}" ]; then
 fi
 
 # Reset to default port if the PORT setting is missing
-if [ ! -f "${DOTFILEDIR}/PORT" ] || [ -z "${DOTFILEDIR}/PORT" ]; then
+if [ ! -f "${DOTFILEDIR}/PORT" ] || [ -z "$(cat ${DOTFILEDIR}/PORT)" ]; then
   log_wrn "PORT setting is missing, setting to 3128"
   echo "3128" > "${DOTFILEDIR}/PORT"
 fi

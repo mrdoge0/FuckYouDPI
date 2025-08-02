@@ -113,12 +113,52 @@ for PKG in $(ls "${DOTFILEDIR}" | grep -vE '^TRICK_|^PORT$'); do
   for TARGET_UID in $(dumpsys package ${PKG} | grep uid | cut -d= -f2 | cut -d" " -f1 | uniq); do      
     # Report start
     log_inf "Enabling for ${PKG} (UID ${TARGET_UID})"
-    
     # Route app to this entire fuckery
     iptables -t mangle -A OUTPUT -p tcp -m owner --uid-owner "${TARGET_UID}" -j MARK --set-mark 1
     iptables -t mangle -A PREROUTING -p tcp -m mark --mark 1 -j TPROXY --on-port "${TPWS_PORT}" --tproxy-mark 1
-    
     # Report finish
     log_inf "Done enabling for ${PKG} (UID ${TARGET_UID})"
   done
+done
+
+# This is the exact place when this code turns into mental illness
+
+# Internal variable to keep last IP routes result
+LAST_ROUTES=""
+
+# Function to apply exit ports
+apply_exit_ports() {
+  # Reload table 100
+  ip route flush table 100
+  ip rule add fwmark 1 lookup 100 2>/dev/null
+  ip route add local 0.0.0.0/0 dev lo table 100 2>/dev/null
+  # Get current routes
+  CURRENT_ROUTES=$(ip route show default)
+  # Apply this entire fuckery for each interface
+  echo "${CURRENT_ROUTES}" | while read -r LINE; do
+    GW=$(echo "${LINE}" | awk '{for(i=1;i<=NF;i++){if($i=="via"){print $(i+1); break}}}')
+    DEV=$(echo "${LINE}" | awk '{for(i=1;i<=NF;i++){if($i=="dev"){print $(i+1); break}}}')
+    if [ -n "${GW}" ] && [ -n "${DEV}" ]; then
+      log_inf "Adding default route via ${GW} dev ${DEV} to table 100"
+      ip route add default via "${GW}" dev "${DEV}" table 100 2>/dev/null
+    elif [ -n "${DEV}" ]; then
+      log_inf "Adding default route dev ${DEV} to table 100 (no gateway)"
+      ip route add default dev "${DEV}" table 100 2>/dev/null
+    fi
+  done
+  # Save last routes
+  LAST_ROUTES="${CURRENT_ROUTES}"
+}
+
+# Run this the first time
+apply_exit_ports
+
+# Daemonize and literally spy on network routes
+while true; do
+  sleep 15
+  NEW_ROUTES="$(ip route show default)"
+  if [ "${NEW_ROUTES}" != "${LAST_ROUTES}" ]; then
+    log_inf "Route table changed, re-applying exit ports"
+    apply_exit_ports
+  fi
 done

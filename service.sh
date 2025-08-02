@@ -35,11 +35,9 @@ log_err() {
 # Create fuckyoudpi.d if doesn't exist.
 if [ ! -d "${DOTFILEDIR}" ]; then
   mkdir "${DOTFILEDIR}"
-  # do default settings
-  touch "${DOTFILEDIR}/TRICK_HOSTSPELL"
-  touch "${DOTFILEDIR}/TRICK_OOB"
-  touch "${DOTFILEDIR}/TRICK_DISORDER"
-  touch "${DOTFILEDIR}/TRICK_TARGETS"
+  for F in "HOSTSPELL" "OOB" "DISORDER" "TARGETS"; do
+    touch "${DOTFILEDIR}/TRICK_${F}"
+  done
   log_inf "First time starting."
 fi
 
@@ -91,16 +89,15 @@ sleep 15
 
 # Run workers
 for PKG in $(ls "${DOTFILEDIR}" | grep -vE '^TRICK_|^PORT$'); do
-  for TARGET_UID in $(dumpsys package ${PKG} | grep uid | cut -d= -f2 | cut -d" " -f1 | uniq); do
-      
-    # Report start.
+  for TARGET_UID in $(dumpsys package ${PKG} | grep uid | cut -d= -f2 | cut -d" " -f1 | uniq); do      
+    # Report start
     log_inf "Enabling for ${PKG} (UID ${TARGET_UID})"
     
-    # Route app to this entire fuckery.
+    # Route app to this entire fuckery
     iptables -t mangle -A OUTPUT -p tcp -m owner --uid-owner "${TARGET_UID}" -j MARK --set-mark 1
     iptables -t mangle -A PREROUTING -p tcp -m mark --mark 1 -j TPROXY --on-port "${TPWS_PORT}" --tproxy-mark 1
     
-    # Report finish.
+    # Report finish
     log_inf "Done enabling for ${PKG} (UID ${TARGET_UID})"
   done
 done

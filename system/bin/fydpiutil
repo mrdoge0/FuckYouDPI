@@ -67,5 +67,15 @@ case "$1" in
                     echo "Success - Changes now require a reboot.";;
             *) echo "Usage: fydpiutil [[enable/disable] [package]] [trick [trick] [enable/disable]]" && exit 1;;
           esac;;
-  *) echo "Usage: fydpiutil [[enable/disable] [package]] [trick [trick] [enable/disable]]" && exit 1;;
+  nolog) [ -z "$2" ] && echo "Usage: fydpiutil nolog [enable/disable]" && exit 1
+         case "$2" in
+           enable) [ -f "/data/adb/fuckyoudpi.d/TRICK_NO_LOG" ] && echo "Nothing to do." && exit 0
+                    touch "/data/adb/fuckyoudpi.d/TRICK_NO_LOG" && echo "Success.";;
+           disable) [ ! -f "/data/adb/fuckyoudpi.d/TRICK_NO_LOG" ] && echo "Nothing to do." && exit 0
+                    rm "/data/adb/fuckyoudpi.d/TRICK_NO_LOG" && echo "Success.";;
+           *) echo "Usage: fydpiutil nolog [enable/disable]" && exit 1;;
+  *) echo "Usage: fydpiutil [[enable/disable] [package]] [trick [trick] [enable/disable]] [nolog [enable/disable]]" && exit 1;;
 esac
+
+# exit
+exit 0

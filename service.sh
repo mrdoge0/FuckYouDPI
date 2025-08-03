@@ -56,6 +56,19 @@ NFQWS_ARGS="--uid=0:0 --port ${NFQWS_PORT} --hostlist=${DOTFILEDIR}/TRICK_TARGET
 log_inf "TPWS arguments are '${TPWS_ARGS}'"
 log_inf "NFQWS arguments are '${NFQWS_ARGS}'"
 
+# Wait rest of the 15 seconds for userland to finish getting ready.
+log_inf "Waiting userland to get ready"
+sleep 15
+
+# Create kernel rules
+log_inf "Adding kernel rules"
+ip rule add fwmark 1 lookup 100 2>/dev/null
+ip route add local 0.0.0.0/0 dev lo table 100 2>/dev/null
+
+# Invoke daemon and wait a fucking sec
+${MODDIR}/fydpid.sh &
+sleep 1
+
 # Check for binary and start TPWS
 TPWS_BINARY="${MODDIR}/static-${ARCH}/tpws"
 [ ! -f "${TPWS_BINARY}" ] && log_err "Unable to find TPWS binary for '${ARCH}'!" --fatal
@@ -75,15 +88,6 @@ else
   log_inf "NFQWS didn't start because it isn't enabled"
 fi
 
-# Create kernel rules
-log_inf "Adding kernel rules"
-ip rule add fwmark 1 lookup 100 2>/dev/null
-ip route add local 0.0.0.0/0 dev lo table 100 2>/dev/null
-
-# Wait 15 seconds for userland to finish getting ready.
-log_inf "Waiting userland to get ready"
-sleep 15
-
 # Run workers
 for PKG in $(ls "${DOTFILEDIR}" | grep -vE '^TRICK_|^PORT$'); do
   for TARGET_UID in $(dumpsys package ${PKG} | grep uid | cut -d= -f2 | cut -d" " -f1 | uniq); do      
@@ -96,6 +100,3 @@ for PKG in $(ls "${DOTFILEDIR}" | grep -vE '^TRICK_|^PORT$'); do
     log_inf "Done enabling for ${PKG} (UID ${TARGET_UID})"
   done
 done
-
-# Invoke daemon and fuck off
-${MODDIR}/fydpid.sh &

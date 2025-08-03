@@ -3,9 +3,6 @@
 # (c) 2025 mrdoge0, Free Software Licensed under Apache-2.0
 source "${0%/*}/common-func.sh"
 
-# Debugging options (again)
-[ -f "${DOTFILEDIR}/TRICK_DEBUG" ] && set -x
-
 # Enable or disable logging by looking to TRICK_NO_LOG (fucking again)
 if [ -f "${DOTFILEDIR}/TRICK_NO_LOG" ]; then
   LOGGING_ENABLED=0

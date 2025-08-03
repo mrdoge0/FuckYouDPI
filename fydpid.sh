@@ -1,7 +1,7 @@
 #!/system/bin/sh
 # Fuck You DPI! - Daemon
 # (c) 2025 mrdoge0, Free Software Licensed under Apache-2.0
-DOTFILEDIR="/data/adb/fuckyoudpi.d"
+source "${0%/*}/common-func.sh"
 
 # Debugging options (again)
 [ -f "${DOTFILEDIR}/TRICK_DEBUG" ] && set -x

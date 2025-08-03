@@ -9,7 +9,7 @@ FuckYouDPI runs TPWS, and runs the internet connection of user-specified target 
 * TPWS is a tool that bypasses DPI for user-specified domains. Target domains are user-specified on FuckYouDPI too.
 
 ### Requirements
-* Android 8.1 Oreo or newer.
+* Android 10 Quince Tart or newer.
 * Magisk, KernelSU or APatch installed.
 * KsuWebUI (only for Magisk).
 

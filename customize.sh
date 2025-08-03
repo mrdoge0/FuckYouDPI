@@ -1,7 +1,7 @@
 # (c) 2025 mrdoge0, Free Software Licensed under Apache-2.0
 
 # Minimum-maximum API settings.
-MINAPI=27
+MINAPI=29
 MAXAPI=36
 
 # Permissions and companion install.

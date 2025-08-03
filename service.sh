@@ -122,4 +122,4 @@ for PKG in $(ls "${DOTFILEDIR}" | grep -vE '^TRICK_|^PORT$'); do
 done
 
 # Invoke daemon and fuck off
-${DOTFILEDIR}/fydpid.sh &
+${MODDIR}/fydpid.sh &

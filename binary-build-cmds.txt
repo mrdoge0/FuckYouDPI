@@ -1,0 +1,5 @@
+(don't forget to add LLVM of the Google NDK or ONDK to the PATH :D)
+TPWS AArch64 : make CC=aarch64-linux-android29-clang OPTIMIZE=-O2 android
+TPWS x86_64  : make CC=x86_64-linux-android29-clang OPTIMIZE=-O2 android
+NFQWS AArch64: make CC=aarch64-linux-android29-clang OPTIMIZE=-O2 android
+NFQWS x86_64 : make CC=x86_64-linux-android29-clang OPTIMIZE=-O2 android

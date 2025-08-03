@@ -90,6 +90,7 @@ ${TPWS_BINARY} ${TPWS_ARGS} &
 # Check for binary and start NFQWS, if it's enabled
 NFQWS_BINARY="${MODDIR}/static-${ARCH}/nfqws"
 if [ -f "${DOTFILEDIR}/TRICK_NFQWS" ] && [ -f "${NFQWS_BINARY}" ]; then
+  log_wrn "NFQWS support is HIGHLY EXPERIMENTAL!!!"
   log_inf "Starting static-${ARCH}/nfqws"
   ${NFQWS_BINARY} ${NFQWS_ARGS} &
 elif [ -f "${DOTFILEDIR}/TRICK_NFQWS" ] && [ ! -f "${NFQWS_BINARY}" ]; then

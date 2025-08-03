@@ -74,6 +74,7 @@ case "$1" in
            disable) [ ! -f "/data/adb/fuckyoudpi.d/TRICK_NO_LOG" ] && echo "Nothing to do." && exit 0
                     rm "/data/adb/fuckyoudpi.d/TRICK_NO_LOG" && echo "Success.";;
            *) echo "Usage: fydpiutil nolog [enable/disable]" && exit 1;;
+          esac;;
   debug) [ -z "$2" ] && echo "Usage: fydpiutil debug [enable/disable]" && exit 1
          case "$2" in
            enable) [ -f "/data/adb/fuckyoudpi.d/TRICK_DEBUG" ] && echo "Nothing to do." && exit 0
@@ -81,6 +82,7 @@ case "$1" in
            disable) [ ! -f "/data/adb/fuckyoudpi.d/TRICK_DEBUG" ] && echo "Nothing to do." && exit 0
                     rm "/data/adb/fuckyoudpi.d/TRICK_DEBUG" && echo "Success.";;
            *) echo "Usage: fydpiutil debug [enable/disable]" && exit 1;;
+          esac;;
   *) echo "Usage: fydpiutil [[enable/disable] [package]]"
      echo "                  [trick [trick] [enable/disable]]"
      echo "                  [domain [domain] [enable/disable]]"

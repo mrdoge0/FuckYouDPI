@@ -74,7 +74,15 @@ case "$1" in
            disable) [ ! -f "/data/adb/fuckyoudpi.d/TRICK_NO_LOG" ] && echo "Nothing to do." && exit 0
                     rm "/data/adb/fuckyoudpi.d/TRICK_NO_LOG" && echo "Success.";;
            *) echo "Usage: fydpiutil nolog [enable/disable]" && exit 1;;
-          esac;;
+         esac;;
+  nfqws) [ -z "$2" ] && echo "Usage: fydpiutil nfqws [enable/disable]" && exit 1
+         case "$2" in
+           enable) [ -f "/data/adb/fuckyoudpi.d/TRICK_NFQWS" ] && echo "Nothing to do." && exit 0
+                    touch "/data/adb/fuckyoudpi.d/TRICK_NFQWS" && echo "Success - Changes now require a reboot.";;
+           disable) [ ! -f "/data/adb/fuckyoudpi.d/TRICK_NFQWS" ] && echo "Nothing to do." && exit 0
+                    rm "/data/adb/fuckyoudpi.d/TRICK_NFQWS" && echo "Success - Changes now require a reboot.";;
+           *) echo "Usage: fydpiutil nfqws [enable/disable]" && exit 1;;
+         esac;;
   debug) [ -z "$2" ] && echo "Usage: fydpiutil debug [enable/disable]" && exit 1
          case "$2" in
            enable) [ -f "/data/adb/fuckyoudpi.d/TRICK_DEBUG" ] && echo "Nothing to do." && exit 0

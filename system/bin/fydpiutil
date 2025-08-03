@@ -91,11 +91,26 @@ case "$1" in
                     rm "/data/adb/fuckyoudpi.d/TRICK_DEBUG" && echo "Success.";;
            *) echo "Usage: fydpiutil debug [enable/disable]" && exit 1;;
           esac;;
+  getport) if [ "$2" == "-h" ] || [ "$2" == "--human-readable" ]; then
+             echo "TPWS port is $(cat /data/adb/fuckyoudpi.d/PORT)"
+           else
+             cat "/data/adb/fuckyoudpi.d/PORT"
+           fi;;
+  getport-nfqws) if [ "$2" == "-h" ] || [ "$2" == "--human-readable" ]; then
+                   echo "NFQWS port is $(cat /data/adb/fuckyoudpi.d/TRICK_NFQWS_PORT)"
+                 else
+                   cat "/data/adb/fuckyoudpi.d/TRICK_NFQWS_PORT"
+                 fi;;
+  setport) [ -z "$2" ] && echo "Usage: fydpiutil setport [new_port]" && exit 1
+           [ "$(cat /data/adb/fuckyoudpi.d/PORT)" == "$2" ] && echo "Nothing to do." && exit 0
+           echo "$2" > "/data/adb/fuckyoudpi.d/PORT"
+           echo "Success - Changes now require a reboot.";;
   *) echo "Usage: fydpiutil [[enable/disable] [package]]"
      echo "                  [trick [trick] [enable/disable]]"
      echo "                  [domain [domain] [enable/disable]]"
      echo "                  [nolog [enable/disable]]"
      echo "                  [debug [enable/disable]]"
+     echo "                  [getport[-nfqws] [-h/--human-readable]]"
      exit 2;;
 esac
 

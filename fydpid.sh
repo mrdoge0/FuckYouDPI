@@ -3,29 +3,6 @@
 # (c) 2025 mrdoge0, Free Software Licensed under Apache-2.0
 source "${0%/*}/common-func.sh"
 
-# Enable or disable logging by looking to TRICK_NO_LOG (fucking again)
-if [ -f "${DOTFILEDIR}/TRICK_NO_LOG" ]; then
-  LOGGING_ENABLED=0
-else
-  LOGGING_ENABLED=1
-fi
-
-# Info logging function
-log_inf() {
-  [ "${LOGGING_ENABLED}" -eq 1 ] && log -p i -t "FuckYouDPI" "$1"
-}
-
-# Warning logging function
-log_wrn() {
-  [ "${LOGGING_ENABLED}" -eq 1 ] && log -p w -t "FuckYouDPI" "$1"
-}
-
-# Error logging function
-log_err() {
-  [ "${LOGGING_ENABLED}" -eq 1 ] && log -p e -t "FuckYouDPI" "$1"
-  [ "$2" == "--fatal" ] && exit 1
-}
-
 # This is the exact place when this code turns into mental illness
 
 # Internal variable to keep last IP routes result

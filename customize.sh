@@ -4,7 +4,7 @@
 MINAPI=29
 MAXAPI=36
 
-# Permissions and companion install.
+# Permissions and setcaps.
 set_permissions() {
   set_perm_recursive $MODPATH/static-aarch64      0 0 0755 0755
   set_perm_recursive $MODPATH/static-x86_64       0 0 0755 0755
@@ -12,6 +12,10 @@ set_permissions() {
   set_perm           $MODPATH/action.sh           0 0 0755
   set_perm           $MODPATH/service.sh          0 0 0755
   set_perm           $MODPATH/fydpid.sh           0 0 0755
+  setcap             'cap_net_admin,cap_net_raw,cap_net_bind_service=eip' $MODPATH/static-aarch64/tpws
+  #setcap             'cap_net_admin,cap_net_raw,cap_net_bind_service=eip' $MODPATH/static-aarch64/nfqws
+  setcap             'cap_net_admin,cap_net_raw,cap_net_bind_service=eip' $MODPATH/static-x86_64/tpws
+  #setcap             'cap_net_admin,cap_net_raw,cap_net_bind_service=eip' $MODPATH/static-x86_64/nfqws
 }
 
 # Logic from MMT Extended

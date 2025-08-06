@@ -12,14 +12,15 @@ get_rom() {
   fi
 
   # AOSP and Pixel replicas
-  if [ "$(getprop ro.product.name)" == "aosp*" ] || [ "$(getprop ro.product.name)" == "treble*" ] || [ "$(getprop ro.product.name)" == "gsi_gms*" ]; then
-    echo "AOSP or a Pixel replica"
-  fi
+  case "$(getprop ro.product.name)" in
+    aosp*|treble*|gsi_gms*)
+      echo "AOSP or a Pixel replica";;
+  esac
 
   # MIUI / HyperOS
   if [ "$(getprop ro.build.version.incremental)" == "OS*XM" ]; then
     X=$(getprop ro.build.version.incremental)
-    if [ ${#${X}} -eq 3 ]; then
+    if [ ${#X} -eq 3 ]; then
       A="$(echo "${X}" | cut -c3).$(echo "${X}" | cut -c7)"
     else
       A="$(echo "${X}" | cut -c3).0"
@@ -85,17 +86,17 @@ generate_data() {
   if [ $(echo "${GETROM_RESULT}" | wc -l) -eq 1 ]; then
     echo "  \"rom\": \"${GETROM_RESULT}\","
   else
-    echo "  \"rom\": \"${GETROM_RESULT//"\n"/', '}\","
+    echo "  \"rom\": \"$(echo ${GETROM_RESULT} | paste -sd ', ' -)\","
   fi
 
   # FuckYouDPI version code
-  echo "\"fydpi_vercode\": \"$(echo /data/adb/modules/fuckyoudpi/module.prop | grep versionCode | cut -d= -f2)\","
+  echo "\"fydpi_vercode\": \"$(cat /data/adb/modules/fuckyoudpi/module.prop | grep versionCode | cut -d= -f2)\","
 
   # Architecture
   case "$(getprop ro.product.cpu.abi)" in
-    arm64-v8a) echo "\"arch\": \"aarch64\""
-    x86_64) echo "\"arch\": \"x86_64\""
-    *) echo "\"arch\": \"unsupported\""
+    arm64-v8a) echo "\"arch\": \"aarch64\"";;
+    x86_64) echo "\"arch\": \"x86_64\"";;
+    *) echo "\"arch\": \"unsupported\"";;
   esac
 
   # JSON Footer

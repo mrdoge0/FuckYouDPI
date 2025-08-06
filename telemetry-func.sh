@@ -7,7 +7,7 @@
 # Function to catch ROM
 get_rom() {
   # LineageOS
-  if getprop ro.lineage.build.version; then 
+  if getprop ro.lineage.build.version > /dev/null; then 
     echo "LineageOS $(getprop ro.lineage.build.version) [$(getprop ro.lineage.version)]"
   fi
 
@@ -90,13 +90,13 @@ generate_data() {
   fi
 
   # FuckYouDPI version code
-  echo "\"fydpi_vercode\": \"$(cat /data/adb/modules/fuckyoudpi/module.prop | grep versionCode | cut -d= -f2)\","
+  echo "  \"fydpi_vercode\": \"$(cat /data/adb/modules/fuckyoudpi/module.prop | grep versionCode | cut -d= -f2)\","
 
   # Architecture
   case "$(getprop ro.product.cpu.abi)" in
-    arm64-v8a) echo "\"arch\": \"aarch64\"";;
-    x86_64) echo "\"arch\": \"x86_64\"";;
-    *) echo "\"arch\": \"unsupported\"";;
+    arm64-v8a) echo "  \"arch\": \"aarch64\"";;
+    x86_64) echo "  \"arch\": \"x86_64\"";;
+    *) echo "  \"arch\": \"unsupported\"";;
   esac
 
   # JSON Footer

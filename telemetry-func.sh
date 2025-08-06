@@ -18,19 +18,20 @@ get_rom() {
   esac
 
   # MIUI / HyperOS
-  if [ "$(getprop ro.build.version.incremental)" == "OS*XM" ]; then
-    X=$(getprop ro.build.version.incremental)
-    if [ ${#X} -eq 3 ]; then
-      A="$(echo "${X}" | cut -c3).$(echo "${X}" | cut -c7)"
-    else
-      A="$(echo "${X}" | cut -c3).0"
-    fi
-    echo "HyperOS ${A} [${X}]"
-  elif [ "$(getprop ro.build.version.incremental)" == "V*XM" ]; then
-    X=$(getprop ro.build.version.incremental)
-    A="$(echo "${X}" | cut -c2)$(echo "${X}" | cut -c3).$(echo "${X}" | cut -c5)"
-    echo "MIUI ${A} [${X}]"
-  fi
+  case "$(getprop ro.build.version.incremental)" in
+    OS*XM)
+      X=$(getprop ro.build.version.incremental)
+      if [ ${#X} -eq 3 ]; then
+        A="$(echo "${X}" | cut -c3).$(echo "${X}" | cut -c7)"
+      else
+        A="$(echo "${X}" | cut -c3).0"
+      fi
+      echo "HyperOS ${A} [${X}]";;
+    V1*XM)
+      X=$(getprop ro.build.version.incremental)
+      A="$(echo "${X}" | cut -c2)$(echo "${X}" | cut -c3).$(echo "${X}" | cut -c5)"
+      echo "MIUI ${A} [${X}]";;
+  esac
 }
 
 # Function to catch root solution
@@ -90,7 +91,7 @@ generate_data() {
   fi
 
   # FuckYouDPI version code
-  echo "  \"fydpi_vercode\": \"$(cat /data/adb/modules/fuckyoudpi/module.prop | grep versionCode | cut -d= -f2)\","
+  echo "  \"fydpi_vercode\": \"$(cat /data/adb/modules/fuckyoudpi/module.prop 2>/dev/null | grep versionCode | cut -d= -f2)\","
 
   # Architecture
   case "$(getprop ro.product.cpu.abi)" in

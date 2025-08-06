@@ -39,23 +39,23 @@ get_root_solution() {
   PMRESULT=$(pm list packages)
 
   # Magisk
-  if echo "${PMRESULT}" | grep "com.topjohnwu.magisk"; then
+  if echo "${PMRESULT}" | grep "com.topjohnwu.magisk" > /dev/null; then
     echo "Magisk v$(su -v | cut -d':' -f1) [$(su -V)]"
 
   # KernelSU
-  elif echo "${PMRESULT}" | grep "me.weishu.kernelsu"; then
+  elif echo "${PMRESULT}" | grep "me.weishu.kernelsu" > /dev/null; then
     echo "KernelSU v$(su -v | cut -d':' -f1) [$(su -V)]"
 
   # KernelSU Next
-  elif echo "${PMRESULT}" | grep "com.rifsxd.ksunext"; then
+  elif echo "${PMRESULT}" | grep "com.rifsxd.ksunext" > /dev/null; then
     echo "KSU Next v$(su -v | cut -d':' -f1) [$(su -V)]"
 
   # APatch
-  elif echo "${PMRESULT}" | grep "me.bmax.apatch"; then
+  elif echo "${PMRESULT}" | grep "me.bmax.apatch" > /dev/null; then
     echo "APatch v$(su -v | cut -d':' -f1) [$(su -V)]"
 
   # SukiSU
-  elif echo "${PMRESULT}" | grep "sukisu"; then
+  elif echo "${PMRESULT}" | grep "sukisu" > /dev/null; then
     echo "SukiSU v$(su -v | cut -d':' -f1) [$(su -V)]"
 
   # Other

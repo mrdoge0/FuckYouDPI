@@ -84,6 +84,10 @@ log_inf "Adding kernel rules"
 ip rule add fwmark 1 lookup 100 2>/dev/null
 ip route add local 0.0.0.0/0 dev lo table 100 2>/dev/null
 
+# Grant network capabilities
+log_inf "Granting network capabilites to TPWS"
+setcap 'cap_net_admin,cap_net_raw,cap_net_bind_service=eip' ${TPWS_BINARY}
+
 # Invoke daemon and wait a fucking sec
 ${MODDIR}/fydpid.sh &
 sleep 1
@@ -94,6 +98,8 @@ ${TPWS_BINARY} ${TPWS_ARGS} &
 
 # Start NFQWS, if it's enabled and usable
 if [ ${NFQWS_USABLE_AND_ENABLED} -eq 1 ]; then
+  log_inf "Granting network capabilites to NFQWS"
+  setcap 'cap_net_admin,cap_net_raw,cap_net_bind_service=eip' ${NFQWS_BINARY}
   log_inf "Starting static-${ARCH}/nfqws"
   ${NFQWS_BINARY} ${NFQWS_ARGS} &
 fi

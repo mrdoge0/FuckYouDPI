@@ -42,17 +42,12 @@ NFQWS_PORT="$(cat ${DOTFILEDIR}/TRICK_NFQWS_PORT 2>/dev/null)"
 # Load in settings
 TPWS_ARGS="--uid=0:0 --port ${TPWS_PORT} --hostlist=${DOTFILEDIR}/TRICK_TARGETS"
 NFQWS_ARGS="--uid=0:0 --port ${NFQWS_PORT} --hostlist=${DOTFILEDIR}/TRICK_TARGETS"
-[ -f "${DOTFILEDIR}/TRICK_HOSTSPELL" ] && TPWS_ARGS="${TPWS_ARGS} --hostspell=hoSt" && NFQWS_ARGS="${NFQWS_ARGS} --hostspell=hoSt"
-[ -f "${DOTFILEDIR}/TRICK_OOB" ] && TPWS_ARGS="${TPWS_ARGS} --oob" && NFQWS_ARGS="${NFQWS_ARGS} --oob"
-[ -f "${DOTFILEDIR}/TRICK_DISORDER" ] && TPWS_ARGS="${TPWS_ARGS} --disorder" && NFQWS_ARGS="${NFQWS_ARGS} --disorder"
-[ -f "${DOTFILEDIR}/TRICK_HOSTDOT" ] && TPWS_ARGS="${TPWS_ARGS} --hostdot" && NFQWS_ARGS="${NFQWS_ARGS} --hostdot"
-[ -f "${DOTFILEDIR}/TRICK_HOSTTAB" ] && TPWS_ARGS="${TPWS_ARGS} --hosttab" && NFQWS_ARGS="${NFQWS_ARGS} --hosttab"
-[ -f "${DOTFILEDIR}/TRICK_HOSTNOSPACE" ] && TPWS_ARGS="${TPWS_ARGS} --hostnospace" && NFQWS_ARGS="${NFQWS_ARGS} --hostnospace"
-[ -f "${DOTFILEDIR}/TRICK_DOMCASE" ] && TPWS_ARGS="${TPWS_ARGS} --domcase" && NFQWS_ARGS="${NFQWS_ARGS} --domcase"
-[ -f "${DOTFILEDIR}/TRICK_METHODSPACE" ] && TPWS_ARGS="${TPWS_ARGS} --methodspace" && NFQWS_ARGS="${NFQWS_ARGS} --methodspace"
-[ -f "${DOTFILEDIR}/TRICK_METHODEOL" ] && TPWS_ARGS="${TPWS_ARGS} --methodeol" && NFQWS_ARGS="${NFQWS_ARGS} --methodeol"
-[ -f "${DOTFILEDIR}/TRICK_UNIXEOL" ] && TPWS_ARGS="${TPWS_ARGS} --unixeol" && NFQWS_ARGS="${NFQWS_ARGS} --unixeol"
 [ -f "${DOTFILEDIR}/TRICK_SPLIT" ] && TPWS_ARGS="${TPWS_ARGS} --split-any-protocol" && NFQWS_ARGS="${NFQWS_ARGS} --split-any-protocol"
+[ -f "${DOTFILEDIR}/TRICK_HOSTSPELL" ] && TPWS_ARGS="${TPWS_ARGS} --hostspell=hoSt" && NFQWS_ARGS="${NFQWS_ARGS} --hostspell=hoSt"
+for T in "oob" "disorder" "hostdot" "hosttab" "hostnospace" "domcase" "methodspace" "methodeol" "unixeol"; do
+  TX="$(echo ${T} | tr '[:lower:]' '[:upper:]')"
+  [ -f "${DOTFILEDIR}/TRICK_${TX}" ] && TPWS_ARGS="${TPWS_ARGS} --${T}" && NFQWS_ARGS="${NFQWS_ARGS} --${T}"
+done
 log_inf "TPWS arguments are '${TPWS_ARGS}'"
 log_inf "NFQWS arguments are '${NFQWS_ARGS}'"
 

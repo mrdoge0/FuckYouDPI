@@ -84,6 +84,7 @@ log_inf "Granting network capabilites to TPWS"
 setcap 'cap_net_admin,cap_net_raw,cap_net_bind_service=eip' ${TPWS_BINARY}
 
 # Invoke daemon and wait a fucking sec
+log_inf "Invoking fydpid"
 ${MODDIR}/fydpid.sh &
 sleep 1
 

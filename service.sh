@@ -7,7 +7,17 @@ source "${MODDIR}/common-func.sh"
 # Debugging options
 [ -f "${DOTFILEDIR}/TRICK_DEBUG_NOAUTOSTART" ] && [ "$1" != "--manual-start" ] && exit 0
 
-# Create fuckyoudpi.d if doesn't exist.
+# Remount data to remove nosuid option
+# (it potentially can create security issues but nosuid is problematic AF in this purpose)
+log_inf "Remounting data without nosuid"
+mount -o remount,suid /data
+SUID_EXIT=$?
+case "${SUID_EXIT}" in
+  0) log_wrn "Remounted data without nosuid. This can potentially cause security issues but this is required for FuckYouDPI to run (at least for now).";;
+  *) log_err "Cannot remount data without nosuid!!! (mount command exit code: ${SUID_EXIT})";;
+esac
+
+# Create fuckyoudpi.d if doesn't exist
 if [ ! -d "${DOTFILEDIR}" ]; then
   mkdir "${DOTFILEDIR}"
   for F in "HOSTSPELL" "OOB" "DISORDER" "TARGETS"; do
@@ -90,7 +100,7 @@ sleep 1
 
 # Start TPWS
 log_inf "Starting static-${ARCH}/tpws"
-su -c "${TPWS_BINARY} ${TPWS_ARGS}" &
+${TPWS_BINARY} ${TPWS_ARGS}" &
 
 # Start NFQWS, if it's enabled and usable
 if [ ${NFQWS_USABLE_AND_ENABLED} -eq 1 ]; then

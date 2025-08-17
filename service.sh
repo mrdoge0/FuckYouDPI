@@ -10,7 +10,7 @@ source "${MODDIR}/common-func.sh"
 # Remount data to remove nosuid option
 # (it potentially can create security issues but nosuid is problematic AF in this purpose)
 log_inf "Remounting data without nosuid"
-mount -o remount,suid /data
+mount -o remount,suid,dev /data
 SUID_EXIT=$?
 case "${SUID_EXIT}" in
   0) log_wrn "Remounted data without nosuid. This can potentially cause security issues but this is required for FuckYouDPI to run (at least for now).";;

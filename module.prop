@@ -1,6 +1,6 @@
 id=fuckyoudpi
 name=Fuck You DPI!
-version=v0.2.2 (6)
-versionCode=6
+version=v0.2.3 (7)
+versionCode=7
 author=mrdoge0
 description=Dynamically bypass deep packet inspection (DPI).

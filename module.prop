@@ -4,3 +4,4 @@ version=v0.2.3 (7)
 versionCode=7
 author=mrdoge0
 description=Dynamically bypass deep packet inspection (DPI).
+updateJson=https://raw.githubusercontent.com/mrdoge0/FuckYouDPI/main/update.json

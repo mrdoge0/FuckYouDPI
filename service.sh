@@ -100,7 +100,7 @@ sleep 1
 
 # Start TPWS
 log_inf "Starting static-${ARCH}/tpws"
-${TPWS_BINARY} ${TPWS_ARGS}" &
+${TPWS_BINARY} ${TPWS_ARGS} &
 
 # Start NFQWS, if it's enabled and usable
 if [ ${NFQWS_USABLE_AND_ENABLED} -eq 1 ]; then

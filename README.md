@@ -1,3 +1,4 @@
+(There's still no working release. If you know why this module doesn't work, please help me out in the issue about it. If I can't fix that problem, I'll probably kill this project.)
 # Fuck You, DPI!
 Dynamically bypass deep packet inspection (DPI) in Android.
 
@@ -35,7 +36,7 @@ FuckYouDPI can be installed and uninstalled just like any other Magisk/KernelSU/
 ### How to build?
 * Clone the repository.
   ```git clone https://github.com/mrdoge0/FuckYouDPI --depth=1 -b main && cd FuckYouDPI```
-* TPWS and NFQWS binaries in the repository are directly built from the [bol-van](https://github.com/bol-van)'s official [Zapret](https://github.com/bol-van/zapret) source, but if you're too paranoid, you can build them yourself. Just be sure that you're building **static** binaries.
+* TPWS and NFQWS binaries in the repository are directly built from the [bol-van](https://github.com/bol-van)'s official [Zapret](https://github.com/bol-van/zapret) source, but if you're too paranoid, you can build them yourself. Build commands can be found in the `binary-build-cmds.txt` file in the repo.
 * Pack everything.
   ```zip -r out.zip *```
 * Enjoy.
